@@ -1,9 +1,10 @@
-const net = require("net");
+import net from 'net';
 
-function smtpCheck(mxHost, email, timeout = 10000) {
+export function smtpCheck(mxHost, email, timeout = 10000) {
     if (process.env.NODE_ENV === "test") {
-        return { valid: true, code: 250 };
+        return Promise.resolve({ valid: true, code: 250 });
     }
+
     return new Promise((resolve) => {
         const socket = net.createConnection(25, mxHost);
         let step = 0;
@@ -56,5 +57,3 @@ function smtpCheck(mxHost, email, timeout = 10000) {
         });
     });
 }
-
-module.exports = { smtpCheck };

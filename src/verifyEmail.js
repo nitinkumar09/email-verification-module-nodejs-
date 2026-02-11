@@ -1,24 +1,22 @@
-const dns = require("dns").promises;
-const { smtpCheck } = require("./smtpCheck");
-const { getDidYouMean } = require("./didYouMean");
+import dns from 'dns/promises';
+import { smtpCheck } from './smtpCheck.js';
+import { getDidYouMean } from './didYouMean.js';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function isValidEmail(email) {
     if (!email || typeof email !== "string") return false;
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!regex.test(email)) return false;
 
-    // double dots not allowed
     if (email.includes("..")) return false;
-
-    // only one @ allowed
     if ((email.match(/@/g) || []).length !== 1) return false;
 
     return true;
 }
 
-async function verifyEmail(email) {
+export default async function verifyEmail(email) {
     const start = Date.now();
 
     const result = {
@@ -80,5 +78,3 @@ async function verifyEmail(email) {
     result.executiontime = (Date.now() - start) / 1000;
     return result;
 }
-
-module.exports = { verifyEmail };
